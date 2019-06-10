@@ -1,5 +1,5 @@
 
-listTOgmt <- function(listgeneset = listgeneset, file){
+list_to_gmt <- function(listgeneset = listgeneset, file){
   if(is.null(file)) stop("'quote' must be 'TRUE', 'FALSE' or numeric")
   gs_len <- length(listgeneset)
   gs_maxlen <- max(unlist(lapply(listgeneset,length)))
