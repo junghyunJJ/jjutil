@@ -17,4 +17,4 @@ h <- function(x) return(x[1:5,1:5])
 
 e <- function(x) return(x[(nrow(x)-5):nrow(x),(ncol(x)-5):ncol(x)])
 
-d <- function(x) return(dim(x))
+dd <- function(x) return(dim(x))
