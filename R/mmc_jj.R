@@ -234,7 +234,7 @@ mmccor <- function(x, y=NULL, ngrids=100, llim=-10, ulim=10, esp=1e-10, core=1){
   for(i in 1:N){
     tt <- as.character(Sys.time())
     # cat(i,"/",nrow(x),": ",tt,"\n",sep = "")
-    if(i %% 10) cat(i,"/",nrow(x),": ",tt,"\n",sep = "")
+    if(i %% 10 == 0) cat(i,"/",nrow(x),": ",tt,"\n",sep = "")
 
     rs[i,i] <- 1
 
