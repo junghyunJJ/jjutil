@@ -1,3 +1,4 @@
+# https://cran.r-project.org/src/contrib/WGCNA_1.69.tar.gz
 # tar -xvzf WGCNA_1.69.tar.gz
 # tar -cvf WGCNA_1.69.tar.gz WGCNA
 # R CMD INSTALL WGCNA_1.69.tar.gz
@@ -206,7 +207,7 @@ mmc.corsym <- function(ys, K, ngrids=100, llim=-10, ulim=10, esp=1e-10){
 
 
 # cat("MMC cor\n")
-mmccor <- function(x, nThreads=1){
+mmccor <- function(x, use = "p", nThreads=1){
   cat("MMC cor\n")
   y=NULL;ngrids=100;llim=-10;ulim=10;esp=1e-10
   x<-t(x)
