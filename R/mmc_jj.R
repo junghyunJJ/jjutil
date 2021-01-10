@@ -1,4 +1,6 @@
-
+# tar -xvzf WGCNA_1.69.tar.gz
+# tar -cvf WGCNA_1.69.tar.gz WGCNA
+# R CMD INSTALL WGCNA_1.69.tar.gz
 # Mixed Model Coexpression (MMC)
 # (c) 2011-2020  Nick Furlotte
 #
@@ -202,115 +204,9 @@ mmc.corsym <- function(ys, K, ngrids=100, llim=-10, ulim=10, esp=1e-10){
 }
 
 
-# cor <- function(x, use = "p"){
-#   y=NULL;ngrids=100;llim=-10;ulim=10;esp=1e-10
-#   x<-t(x)
-#   K = mmc.ncov(x)
-#   # Currently there are issues with using other covariates so I am only regressing out the mean
-#   # I'm looking into this issue
-#   #mmc.corsym <- function(x, K, X0 = NULL, ngrids=100, llim=-10, ulim=10, esp=1e-10){
-#   #if ( is.null(X0) ) {
-#   #  X0 <- matrix(1,ncol(x),1)
-#   #}
-#
-#   X0 <- matrix(1,ncol(x),1)
-#   X01 = X0
-#   X02 = X0
-#
-#   N = nrow(x)
-#
-#   q01 <- ncol(X01)
-#   q11 <- q01 + 1
-#   q02 <- ncol(X02)
-#   q12 <- q02 + 1
-#
-#   rs <- matrix(NA,nrow=N,ncol=N)
-#
-#   for(i in 1:N){
-#     tt <- as.character(Sys.time())
-#     cat(i,"/",nrow(x),": ",tt,"\n",sep = "")
-#     rs[i,i] <- 1
-#     if(i == N){ break }
-#     for(j in (i+1):N){
-#       # cat(j,"\n",sep = "")
-#
-#       vids <- intersect(which(!is.na(x[i,])),which(!is.na(x[j,])))
-#       nv <- length(vids)
-#
-#       # Direction 1
-#       X1 <- cbind(X01[vids,,drop=FALSE],x[i,vids])
-#       if (det(crossprod(X1,X1)) == 0){ next; }
-#       eig.R1 = emma.eigen.R.wo.Z(K[vids,vids],X1)
-#       REMLE <- emma.REMLE(x[j,vids],X1,K[vids,vids],NULL,ngrids,llim,ulim,esp,eig.R1)
-#
-#       # eig.L <- emma.eigen.L.wo.Z(K[vids,vids])
-#       # U <- eig.L$vectors * matrix(sqrt(1/(eig.L$values+REMLE$delta)),nv,nv,byrow=TRUE)
-#       # if(sum(is.nan(U)) > 0){ next; }
-#       # yt <- crossprod(U,x[j,vids])
-#       # Xt <- crossprod(U,X1)
-#       # iXX <- solve(crossprod(Xt,Xt))
-#       # beta1 <- iXX%*%crossprod(Xt,yt)
-#
-#       vgs1 <- REMLE$vg
-#       ves1 <- REMLE$ve
-#       # e <- lmmlite::eigen_rotation(K, x[j,vids], X1 )
-#       # out <- lmmlite::fitLMM(e$Kva, e$y, e$X, tol = 1e-10)
-#       # vgs1 <- out$sigmasq_g
-#       # ves1 <- out$sigmasq_e
-#
-#       # Direction 2
-#       X2 <- cbind(X02[vids,,drop=FALSE],x[j,vids])
-#       if (det(crossprod(X2,X2)) == 0){ next; }
-#       eig.R1 = emma.eigen.R.wo.Z(K[vids,vids],X2)
-#       REMLE <- emma.REMLE(x[i,vids],X2,K[vids,vids],NULL,ngrids,llim,ulim,esp,eig.R1)
-#
-#       # eig.L <- emma.eigen.L.wo.Z(K[vids,vids])
-#       # U <- eig.L$vectors * matrix(sqrt(1/(eig.L$values+REMLE$delta)),nv,nv,byrow=TRUE)
-#       # if(sum(is.nan(U)) > 0){ next; }
-#       # yt <- crossprod(U,x[i,vids])
-#       # Xt <- crossprod(U,X2)
-#       # iXX <- solve(crossprod(Xt,Xt))
-#       # beta2 <- iXX%*%crossprod(Xt,yt)
-#
-#       vgs2 <- REMLE$vg
-#       ves2 <- REMLE$ve
-#       # e <- lmmlite::eigen_rotation(K, x[i,vids], X2 )
-#       # out <- lmmlite::fitLMM(e$Kva, e$y, e$X, tol = 1e-10)
-#       # vgs1 <- out$sigmasq_g
-#       # ves1 <- out$sigmasq_e
-#
-#
-#
-#       #cat(vgs1,",",vgs2,"\n")
-#       #cat(ves1,",",ves2,"\n\n")
-#
-#       sigmaHat1 = vgs1*K[vids,vids] + ves1*diag(nv)
-#       sigmaHat2 = vgs2*K[vids,vids] + ves2*diag(nv)
-#       sigmaHat1Inv = solve(sigmaHat1)
-#       sigmaHat2Inv = solve(sigmaHat2)
-#       sigmaHat1InvChol = chol(sigmaHat1Inv)
-#       sigmaHat2InvChol = chol(sigmaHat2Inv)
-#
-#       y1adj = matrix(x[j,vids] - mean(x[j,vids]),ncol=1)
-#       y2adj = matrix(x[i,vids] - mean(x[i,vids]),ncol=1)
-#       #y1adj = matrix(matrix(x[j,vids],ncol=1) - (X1 %*% matrix(beta1,ncol=1)),ncol=1)
-#       #y2adj = matrix(matrix(x[i,vids],ncol=1) - (X2 %*% matrix(beta2,ncol=1)),ncol=1)
-#
-#       y1adj.chol = sigmaHat1InvChol %*% y1adj
-#       y2adj.chol = sigmaHat2InvChol %*% y2adj
-#
-#       var1 = t(y1adj.chol) %*% y1adj.chol
-#       var2 = t(y2adj.chol) %*% y2adj.chol
-#
-#       rs[i,j] <- (t(y1adj.chol) %*% y2adj.chol) / sqrt(var1 * var2)
-#       rs[j,i] <- rs[i,j]
-#
-#     }
-#   }
-#   return(rs)
-# }
 
-cor <- function(x, use = "p"){
+# cat("MMC cor\n")
+mmccor <- function(x, nThreads=1){
   cat("MMC cor\n")
   y=NULL;ngrids=100;llim=-10;ulim=10;esp=1e-10
   x<-t(x)
@@ -390,7 +286,7 @@ cor <- function(x, use = "p"){
       var2 = t(y2adj.chol) %*% y2adj.chol
 
       (t(y1adj.chol) %*% y2adj.chol) / sqrt(var1 * var2)
-    }, mc.cores = 30) %>% unlist
+    }, mc.cores = nThreads) %>% unlist
 
     rs[(i+1):N,i] <- res
     rs[i,(i+1):N] <- res
@@ -687,52 +583,4 @@ emma.REMLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
   maxve <- maxva*maxdelta
 
   return (list(REML=maxLL,delta=maxdelta,ve=maxve,vg=maxva))
-}
-
-emma.kinship <- function(snps, method="additive", use="all") {
-  n0 <- sum(snps==0,na.rm=TRUE)
-  nh <- sum(snps==0.5,na.rm=TRUE)
-  n1 <- sum(snps==1,na.rm=TRUE)
-  nNA <- sum(is.na(snps))
-
-  stopifnot(n0+nh+n1+nNA == length(snps))
-
-  if ( method == "dominant" ) {
-    flags <- matrix(as.double(rowMeans(snps,na.rm=TRUE) > 0.5),nrow(snps),ncol(snps))
-    snps[!is.na(snps) & (snps == 0.5)] <- flags[!is.na(snps) & (snps == 0.5)]
-  }
-  else if ( method == "recessive" ) {
-    flags <- matrix(as.double(rowMeans(snps,na.rm=TRUE) < 0.5),nrow(snps),ncol(snps))
-    snps[!is.na(snps) & (snps == 0.5)] <- flags[!is.na(snps) & (snps == 0.5)]
-  }
-  else if ( ( method == "additive" ) && ( nh > 0 ) ) {
-    dsnps <- snps
-    rsnps <- snps
-    flags <- matrix(as.double(rowMeans(snps,na.rm=TRUE) > 0.5),nrow(snps),ncol(snps))
-    dsnps[!is.na(snps) & (snps==0.5)] <- flags[!is.na(snps) & (snps==0.5)]
-    flags <- matrix(as.double(rowMeans(snps,na.rm=TRUE) < 0.5),nrow(snps),ncol(snps))
-    rsnps[!is.na(snps) & (snps==0.5)] <- flags[!is.na(snps) & (snps==0.5)]
-    snps <- rbind(dsnps,rsnps)
-  }
-
-  if ( use == "all" ) {
-    mafs <- matrix(rowMeans(snps,na.rm=TRUE),nrow(snps),ncol(snps))
-    snps[is.na(snps)] <- mafs[is.na(snps)]
-  }
-  else if ( use == "complete.obs" ) {
-    snps <- snps[rowSums(is.na(snps))==0,]
-  }
-
-  n <- ncol(snps)
-  K <- matrix(nrow=n,ncol=n)
-  diag(K) <- 1
-
-  for(i in 2:n) {
-    for(j in 1:(i-1)) {
-      x <- snps[,i]*snps[,j] + (1-snps[,i])*(1-snps[,j])
-      K[i,j] <- sum(x,na.rm=TRUE)/sum(!is.na(x))
-      K[j,i] <- K[i,j]
-    }
-  }
-  return(K)
 }
