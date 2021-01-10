@@ -207,9 +207,9 @@ mmc.corsym <- function(ys, K, ngrids=100, llim=-10, ulim=10, esp=1e-10){
 
 
 # cat("MMC cor\n")
-mmccor <- function(x, use = "p", core=1){
+mmccor <- function(x, y=NULL, ngrids=100, llim=-10, ulim=10, esp=1e-10, core=1){
   cat("MMC cor\n")
-  y=NULL;ngrids=100;llim=-10;ulim=10;esp=1e-10
+  # y=NULL;ngrids=100;llim=-10;ulim=10;esp=1e-10
   x<-t(x)
   K = mmc.ncov(x)
   # Currently there are issues with using other covariates so I am only regressing out the mean
