@@ -207,7 +207,7 @@ mmc.corsym <- function(ys, K, ngrids=100, llim=-10, ulim=10, esp=1e-10){
 
 
 # cat("MMC cor\n")
-mmccor <- function(x, use = "p", nThreads=1){
+mmccor <- function(x, use = "p", core=1){
   cat("MMC cor\n")
   y=NULL;ngrids=100;llim=-10;ulim=10;esp=1e-10
   x<-t(x)
@@ -233,7 +233,9 @@ mmccor <- function(x, use = "p", nThreads=1){
   rs <- matrix(NA,nrow=N,ncol=N)
   for(i in 1:N){
     tt <- as.character(Sys.time())
-    cat(i,"/",nrow(x),": ",tt,"\n",sep = "")
+    # cat(i,"/",nrow(x),": ",tt,"\n",sep = "")
+    if(i %% 10) cat(i,"/",nrow(x),": ",tt,"\n",sep = "")
+
     rs[i,i] <- 1
 
     if(i == N){ break }
@@ -287,7 +289,7 @@ mmccor <- function(x, use = "p", nThreads=1){
       var2 = t(y2adj.chol) %*% y2adj.chol
 
       (t(y1adj.chol) %*% y2adj.chol) / sqrt(var1 * var2)
-    }, mc.cores = nThreads) %>% unlist
+    }, mc.cores = core) %>% unlist
 
     rs[(i+1):N,i] <- res
     rs[i,(i+1):N] <- res
