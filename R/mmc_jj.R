@@ -592,6 +592,7 @@ emma.REMLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
 
 # cat("MMC cor\n")
 mmccor2 <- function(x, y=NULL, ngrids=100, llim=-10, ulim=10, esp=1e-10, core=1){
+  res_names <- colnames(x)
   cat("MMC cor\n")
   # y=NULL;ngrids=100;llim=-10;ulim=10;esp=1e-10
   x<-t(x)
@@ -678,7 +679,7 @@ mmccor2 <- function(x, y=NULL, ngrids=100, llim=-10, ulim=10, esp=1e-10, core=1)
     rs[(i+1):N,i] <- res
     rs[i,(i+1):N] <- res
 
-    colnames(rs) <- rownames(rs) <- colnames(t(x))
+    colnames(rs) <- rownames(rs) <- res_names
 
 
   }
