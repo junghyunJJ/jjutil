@@ -688,8 +688,8 @@ mmccor2 <- function(x, y=NULL, ngrids=100, llim=-10, ulim=10, esp=1e-10, core=1)
 
 
 
-cor_lmmite <- function(x, y=NULL, use = "p"){
-  ngrids=100;llim=-10;ulim=10;esp=1e-10
+cor_lmmite <- function(x, y=NULL){
+  # ngrids=100;llim=-10;ulim=10;esp=1e-10
   x<-t(x)
   K = mmc.ncov(x)
   # Currently there are issues with using other covariates so I am only regressing out the mean
