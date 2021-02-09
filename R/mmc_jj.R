@@ -714,7 +714,7 @@ cor_lmmite <- function(x, y=NULL, use = "p"){
 
   for(i in 1:N){
     tt <- as.character(Sys.time())
-    cat(i,"/",nrow(x),": ",tt,"\n",sep = "")
+    if(i %% 10 == 0) cat(i,"/",nrow(x),": ",tt,"\n",sep = "")
     rs[i,i] <- 1
     if(i == N){ break }
     for(j in (i+1):N){
