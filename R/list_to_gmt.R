@@ -26,7 +26,7 @@ ll <- function(x) return(length(x))
 
 # gene_universe <- readLines("~/tools/GCSC/gene_universe.txt")
 # save(gene_universe, file = "data/gene_universe.RData")
-list_to_GCSC <- function(glist, inputtype=c("gene_id","symbol", "ensembl_id"), gene_universe=jjutil::gene_universe, th=10, file){
+list_to_GCSC <- function(glist, inputtype=c("gene_id","symbol", "ensembl_id"), gene_universe=gene_universe, th=10, file){
 
   cat(length(glist),"gene set\n")
   if(is.na(inputtype) | sum(inputtype %in%c("gene_id","symbol", "ensembl_id")) !=1 ){
