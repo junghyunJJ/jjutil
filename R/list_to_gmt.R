@@ -20,3 +20,55 @@ e <- function(x) return(x[(nrow(x)-5):nrow(x),(ncol(x)-5):ncol(x)])
 
 dd <- function(x) return(dim(x))
 ll <- function(x) return(length(x))
+
+# GCSC
+# https://github.com/ksiewert/GCSC
+
+# gene_universe <- readLines("~/tools/GCSC/gene_universe.txt")
+# save(gene_universe, file = "data/gene_universe.RData")
+list_to_GCSC <- function(glist, inputtype=c("gene_id","symbol", "ensembl_id"), gene_universe=jjutil::gene_universe, th=10, file){
+
+  cat(length(glist),"gene set\n")
+  if(is.na(inputtype) | sum(inputtype %in%c("gene_id","symbol", "ensembl_id")) !=1 ){
+    message("Please set input type among gene_id, symbol, and ensembl_id\n")
+  }
+  # load annotation
+  anno <- inner_join(AnnotationDbi::toTable(org.Hs.eg.db::org.Hs.egSYMBOL),
+                     AnnotationDbi::toTable(org.Hs.eg.db::org.Hs.egENSEMBL), by = "gene_id")
+
+  if(inputtype == "symbol"){
+    cat("sym -> ensembl_id\n")
+    ensembl_list <- lapply(glist, function(x){
+      anno %>% filter(anno$symbol %in% x) %>% select(ensembl_id) %>% pull
+    })
+  }else if(inputtype == "gene_id"){
+    cat("gene_id -> ensembl_id\n")
+    ensembl_list <- lapply(glist, function(x){
+      anno %>% filter(anno$gene_id %in% x) %>% select(ensembl_id) %>% pull
+    })
+  }else if(inputtype == "ensembl_id"){
+    # just reshape
+    ensembl_list <- glist
+  }
+
+  # Transformation -  GCSC format
+  save_dat <- data.frame(gene_universe)
+  raw_res <- lapply(ensembl_list, function(xx){
+    data.frame(t(as.numeric(!is.na(match(gene_universe,xx)))))
+  }) %>% rbindlist
+
+  colnames(raw_res) <- gene_universe
+  res <- cbind(names(glist),data.frame(raw_res))
+  colnames(res)[1] <- ""
+
+  # cat(apply(res[,-1], 1, sum),"\n")
+
+  idx <- which(apply(res[,-1], 1, sum) < th)
+  if(length(idx) > 0){
+    cat(length(idx),"genesets filtered (gene set threshold = 10)\n")
+    res <- res[-idx,]
+  }
+  # cat(apply(res[,-1], 1, sum),"\n")
+  write.csv(res,paste0(file,".cvs"), quote = F, row.names = F)
+  cat(paste0(length(glist)," gene set were saved (",paste0(file,".cvs"),")\n"))
+}
