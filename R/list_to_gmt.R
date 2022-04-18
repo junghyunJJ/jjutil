@@ -74,7 +74,27 @@ list_to_GCSC <- function(glist, inputtype=c("gene_id","symbol", "ensembl_id"), g
 }
 
 
-# biomart
-human_mart <- biomaRt::useMart(host="www.ensembl.org", "ENSEMBL_MART_ENSEMBL", dataset="hsapiens_gene_ensembl")
-mouse_mart <- biomaRt::useMart(host="www.ensembl.org", "ENSEMBL_MART_ENSEMBL", dataset="mmusculus_gene_ensembl")
-save(human_mart, mouse_mart, file = "data/biomaRt.RData")
+list_to_mesc <- function(listgeneset, file) {
+
+  list.ensemble <- lapply(listgeneset, function(sel){
+    anno.GTExv8.gencode.v26.annotation %>%
+      filter(symbol %in% sel) %>%
+      select(ID) %>%
+      unique %>%
+      pull
+  })
+
+  if (is.null(file))
+    stop("'quote' must be 'TRUE', 'FALSE' or numeric")
+
+  gs_len <- length(list.ensemble)
+  gs_maxlen <- max(unlist(lapply(list.ensemble, length)))
+  raw_gmt <- data.frame(matrix(nrow = gs_maxlen, ncol = gs_len))
+  for (i in 1:gs_len) raw_gmt[, i] <- c(list.ensemble[[i]], rep(NA, (gs_maxlen - length(list.ensemble[[i]]))))
+  colnames(raw_gmt) <- names(list.ensemble)
+  save_gmt <- data.frame(t(raw_gmt))
+  write.table(save_gmt, file = paste0(file, ".mesc"), row.names = T,
+              col.names = F, quote = F, sep = "\t", na = "")
+  cat(paste0(gs_len, " gene set were saved (", paste0(file,".mesc"), ")\n"))
+}
+
