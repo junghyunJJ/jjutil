@@ -72,3 +72,9 @@ list_to_GCSC <- function(glist, inputtype=c("gene_id","symbol", "ensembl_id"), g
   write.csv(res,paste0(file,".cvs"), quote = F, row.names = F)
   cat(paste0(length(glist)," gene set were saved (",paste0(file,".cvs"),")\n"))
 }
+
+
+# biomart
+human_mart <- biomaRt::useMart(host="www.ensembl.org", "ENSEMBL_MART_ENSEMBL", dataset="hsapiens_gene_ensembl")
+mouse_mart <- biomaRt::useMart(host="www.ensembl.org", "ENSEMBL_MART_ENSEMBL", dataset="mmusculus_gene_ensembl")
+save(human_mart, mouse_mart, file = "data/biomaRt.RData")
