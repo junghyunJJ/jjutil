@@ -89,6 +89,40 @@ list_to_GCSC <- function(glist, inputtype=c("gene_id","symbol", "ensembl_id"), g
 }
 
 
+list_to_GCSC_GTEXv8 <- function(glist, gene_universe=gene_universe, th=10, out){
+
+  cat(length(glist),"gene set\n")
+  anno <- jjutil::anno.GTExv8.gencode.v26.annotation
+
+  cat("sym -> ensembl_id\n")
+  ensembl_list <- lapply(glist, function(x){
+    anno %>% filter(anno$symbol %in% x) %>% select(ID) %>% pull
+  })
+
+  # Transformation -  GCSC format
+  save_dat <- data.frame(gene_universe)
+  raw_res <- lapply(ensembl_list, function(xx){
+    data.frame(t(as.numeric(!is.na(match(gene_universe,xx)))))
+  }) %>% rbindlist
+
+  colnames(raw_res) <- gene_universe
+  res <- cbind(names(glist),data.frame(raw_res))
+  colnames(res)[1] <- ""
+
+  # cat(apply(res[,-1], 1, sum),"\n")
+
+  idx <- which(apply(res[,-1], 1, sum) < th)
+  if(length(idx) > 0){
+    cat(length(idx),"genesets filtered (gene set threshold = 10)\n")
+    res <- res[-idx,]
+  }
+  # cat(apply(res[,-1], 1, sum),"\n")
+  write.csv(res,paste0(out,".cvs"), quote = F, row.names = F)
+  cat(paste0(length(glist)," gene set were saved (",paste0(out,".cvs"),")\n"))
+}
+
+
+
 list_to_mesc <- function(listgeneset, file) {
 
   list.ensemble <- lapply(listgeneset, function(sel){
