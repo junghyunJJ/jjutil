@@ -54,12 +54,12 @@ list_to_GCSC <- function(glist, inputtype=c("gene_id","symbol", "ensembl_id"), g
   if(inputtype == "symbol"){
     cat("sym -> ensembl_id\n")
     ensembl_list <- lapply(glist, function(x){
-      anno %>% filter(anno$symbol %in% x) %>% select(ensembl_id) %>% pull
+      anno %>% filter(anno$symbol %in% x) %>% dplyr::select(ensembl_id) %>% pull
     })
   }else if(inputtype == "gene_id"){
     cat("gene_id -> ensembl_id\n")
     ensembl_list <- lapply(glist, function(x){
-      anno %>% filter(anno$gene_id %in% x) %>% select(ensembl_id) %>% pull
+      anno %>% filter(anno$gene_id %in% x) %>% dplyr::select(ensembl_id) %>% pull
     })
   }else if(inputtype == "ensembl_id"){
     # just reshape
@@ -96,7 +96,7 @@ list_to_GCSC_GTEXv8 <- function(glist, gene_universe=gene_universe, th=10, out){
 
   cat("sym -> ensembl_id\n")
   ensembl_list <- lapply(glist, function(x){
-    anno %>% filter(anno$symbol %in% x) %>% select(ID) %>% pull
+    anno %>% filter(anno$symbol %in% x) %>% dplyr::select(ID) %>% pull
   })
 
   # Transformation -  GCSC format
@@ -128,7 +128,7 @@ list_to_mesc <- function(listgeneset, file) {
   list.ensemble <- lapply(listgeneset, function(sel){
     anno.GTExv8.gencode.v26.annotation %>%
       filter(symbol %in% sel) %>%
-      select(ID) %>%
+      dplyr::select(ID) %>%
       unique %>%
       pull
   })
