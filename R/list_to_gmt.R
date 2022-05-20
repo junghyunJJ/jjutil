@@ -13,6 +13,15 @@ read.gmt <- function(file){
   return(geneSetDB)
 }
 
+# write.gmt <- function(object, fname){
+#   if (class(object) != "list") stop("object should be of class 'list'")
+#   if(file.exists(fname)) unlink(fname)
+#   for (iElement in 1:length(object)){
+#     write.table(t(c(make.names(rep(names(object)[iElement],2)),object[[iElement]])),
+#                 sep="\t",quote=FALSE,
+#                 file=fname,append=TRUE,col.names=FALSE,row.names=FALSE)
+#   }
+# }
 
 list_to_gmt <- function(listgeneset = listgeneset, file){
   if(is.null(file)) stop("'quote' must be 'TRUE', 'FALSE' or numeric")
@@ -85,7 +94,7 @@ list_to_GCSC <- function(glist, inputtype=c("gene_id","symbol", "ensembl_id"), g
   }
   # cat(apply(res[,-1], 1, sum),"\n")
   write.csv(res,paste0(file,".cvs"), quote = F, row.names = F)
-  cat(paste0(length(glist)," gene set were saved (",paste0(file,".cvs"),")\n"))
+  cat(paste0((length(glist) - length(idx))," gene set were saved (",paste0(file,".cvs"),")\n"))
 }
 
 
