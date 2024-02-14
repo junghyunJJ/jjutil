@@ -21,6 +21,7 @@ linear_kernel <- function(X) {
 
 spatial_kernel <- function(normalized_expr, coord, kerneltype = "gaussian", bandwidthtype = "SJ", bandwidth.set.by.user = NULL, sparseKernel = FALSE, sparseKernel_tol = 1e-20, sparseKernel_ncore = 1) {
   # cal spatial Kernel using SpatialPCA r package
+  # https://lulushang.org/SpatialPCA_Tutorial/slideseq.html
 
   # normalized_expr: g x n (we used SCTransform)
   # coord: n x 2 (i.e., x and y)
