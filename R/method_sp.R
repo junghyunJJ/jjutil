@@ -9,8 +9,11 @@ convert_dataframe <- function(dat, preview = TRUE) {
 }
 
 linear_kernel <- function(X) {
-  K <- tcrossprod(as.matrix(X)) # K = np.dot(X, X.T)
-  return(K / max(K))            # return K / K.max()
+  # spot x celltype
+  std <- scale(X)
+  K <- tcrossprod(as.matrix(X)) # K = np.dot(X, X.T) # K <- as.matrix(std) %*% as.matrix(t(std))
+  # return(K / max(K))            # return K / K.max()
+  return(K)
 }
 
 # dist_kernel <- function(X, l) {
