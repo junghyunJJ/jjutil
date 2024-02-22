@@ -2,9 +2,15 @@ convert_dataframe <- function(dat, preview = TRUE) {
   dat <- as.data.frame(dat)
   rownames(dat) <- dat[, 1]
   dat <- dat[, -1]
+
   if (preview) {
-    print(dat[1:5, 1:5])
+    if(ncol(dat) >= 5){
+      print(dat[1:5, 1:5])
+    } else {
+      print(head(dat))
+    }
   }
+
   return(dat)
 }
 
