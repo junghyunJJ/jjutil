@@ -47,7 +47,7 @@ list_to_starfysh <- function(listgeneset = listgeneset, file){
 
   colnames(raw_gmt) <- names(listgeneset)
   # save_gmt <- data.frame("NA",t(raw_gmt))
-  write.csv(raw_gmt,file = paste0(file,".csv"),na = "", row.names = FALSE)
+  write.csv(raw_gmt,file = paste0(file,".csv"),na = "", row.names = FALSE, quote = FALSE)
   cat(paste0(gs_len," gene set were saved (",paste0(file,".csv"),")\n"))
 }
 
