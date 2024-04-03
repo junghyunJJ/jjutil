@@ -1,7 +1,7 @@
-convert_dataframe <- function(dat, preview = TRUE) {
+convert_dataframe <- function(dat, preview = FALSE) {
   dat <- as.data.frame(dat)
   rownames(dat) <- dat[, 1]
-  dat <- dat[, -1]
+  dat <- dat[, -1, drop = FALSE]
 
   if (preview) {
     if(ncol(dat) >= 5){
