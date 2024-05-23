@@ -58,7 +58,7 @@ human_to_mouse <- function(human_ids, input = "ENSEMBL", target = "SYMBOL") {
 
 
 
-hENSEMBL_to_mSYMBOL <- function(human_ids) {
+hENSEMBL_to_mSYMBOL <- function(human_ids, removena = FALSE) {
 
   # human_geneid <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db, human_ids, "ENTREZID", input)
   anno_human <- inner_join(
