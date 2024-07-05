@@ -51,6 +51,20 @@ list_to_starfysh <- function(listgeneset = listgeneset, file){
   cat(paste0(gs_len," gene set were saved (",paste0(file,".csv"),")\n"))
 }
 
+list_to_DAVID <- function(listgeneset = listgeneset, file){
+  if(is.null(file)) stop("'quote' must be 'TRUE', 'FALSE' or numeric")
+  gs_len <- length(listgeneset)
+  gs_maxlen <- max(unlist(lapply(listgeneset,length)))
+  raw_gmt <- data.frame(matrix(nrow = gs_maxlen,ncol = gs_len))
+
+  for(i in 1:gs_len) raw_gmt[,i] <- c(listgeneset[[i]],rep(NA,(gs_maxlen - length(listgeneset[[i]]))))
+
+  colnames(raw_gmt) <- names(listgeneset)
+  # save_gmt <- data.frame("NA",t(raw_gmt))
+  write.table(raw_gmt, file = paste0(file,".txt"), na = "", sep = "\t", row.names = FALSE, quote = FALSE)
+  cat(paste0(gs_len," gene set were saved (",paste0(file,".txt"),")\n"))
+}
+
 
 h <- function(x) return(x[1:5,1:5])
 hh <- function(x) return(x[1:10,1:10])
