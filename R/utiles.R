@@ -11,7 +11,7 @@ summry_gprofiler2 <- function(enrich, plot = FALSE) {
 
   res_enrich <- raw_res_enrich %>%
     select(query, p_value, source, term_name, term_id, GeneRatio, BgRatio, n_GeneRatio, intersection_size, intersection) %>%
-    mutate(term = paste0(term_name, "(", term_id, ")")) %>%
+    mutate(term = paste0(term_name, "\n(", term_id, ")")) %>%
     select(term, query, p_value, source, everything())
 
   if (plot) {
