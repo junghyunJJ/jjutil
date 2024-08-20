@@ -2,6 +2,22 @@ ll <- function(x){
   return(length(x))
 }
 
+summry_gprofiler2 <- function(enrich, plot = FALSE) {
+
+  raw_res_enrich <- enrich$result %>%
+    mutate(GeneRatio = paste0(intersection_size, "/", query_size)) %>%
+    mutate(BgRatio = paste0(term_size, "/", effective_domain_size)) %>%
+    mutate(n_GeneRatio = intersection_size / query_size)
+
+  res_enrich <- raw_res_enrich %>%
+    select(query, p_value, source, term_name, term_id, GeneRatio, BgRatio, n_GeneRatio, intersection_size, intersection)
+
+  if (plot) {
+    gprofiler2::gostplot(enrich, capped = TRUE, interactive = TRUE)
+  }
+  return(res_enrich)
+}
+
 updatejjutil <- function(x){
   devtools::install_github("junghyunJJ/jjutil")
 }
