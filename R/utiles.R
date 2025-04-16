@@ -2,6 +2,9 @@ ll <- function(x){
   return(length(x))
 }
 
+"%nin%" <- function(x, y) !x %in% y # x without y
+
+
 summry_gprofiler2 <- function(enrich, plot = FALSE) {
 
   raw_res_enrich <- enrich$result %>%
